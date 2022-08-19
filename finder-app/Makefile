@@ -2,9 +2,9 @@ CC	= gcc
 
 CROSS_COMPILE	=
 
-CFLAGS	= -Wall -Wextra
+CFLAGS	= -Wall
 
-LFLAGS	= 
+LFLAGS	=
 
 LIBS	=
 
@@ -15,7 +15,7 @@ MAIN	= writer
 all: $(MAIN)
 
 $(MAIN): $(OBJFILES)
-	$(CC) $(CROSS_COMPILE) .$(CFLAGS) -o $(MAIN) $(OBJFILES)
+	$(CROSS_COMPILE)$(CC) $(CFLAGS) -o $(MAIN) $(OBJFILES)
     
 %.o: %.c
 	$(CC) $(CROSS_COMPILE) $(CFLAGS) -c -o $@ $<
