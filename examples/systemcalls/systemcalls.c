@@ -115,12 +115,11 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
  *   The rest of the behaviour is same as do_exec()
  *
 */
-    
-    
-/*
+
+    int status;
     int kidpid;
     
-    int fd = open(command[0], O_WRONLY|O_TRUNC|O_CREAT, 0644);
+    int fd = open(outputfile, O_WRONLY|O_TRUNC|O_CREAT, 0644);
     
     if (fd < 0) { perror("open"); abort(); }
     switch (kidpid = fork()) {
@@ -128,12 +127,19 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
       case 0:
         if (dup2(fd, 1) < 0) { perror("dup2"); abort(); }
         close(fd);
-        execv(command[0], command); perror("execvp"); abort();
+        int ret = execv(command[0], command);
+        if(ret == -1){
+            exit(1);
+        }
       default:
         close(fd);
-        
+        wait(&status);
+        if (WEXITSTATUS(status) == 1 ){           
+            va_end(args);
+            return false;
+        }        
     }
-*/
+
     va_end(args);
 
     return true;
